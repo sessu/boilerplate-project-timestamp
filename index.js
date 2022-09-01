@@ -20,11 +20,34 @@ app.get("/", function (req, res) {
 
 
 app.get("/api/:date", (req, res) => {
-  res.json({
-    test: req.params.date
-  });
-});
+  // Assuming it's an ISO date
+  const myDate = new Date (req.params.date);
+  console.log(myDate);
 
+  // Assuming it's UNIX
+  const myDate2 = new Date (parseInt(req.params.date));
+  console.log(myDate2);
+
+  if (myDate instanceof Date && !isNaN(myDate)) {
+    console.log(`Case 1 ${myDate}`);
+    res.json({
+      unix: Math.floor(myDate.getTime()),
+      utc: myDate.toUTCString()
+    });
+  } else if (myDate2 instanceof Date && !isNaN(myDate2)) {
+    console.log(`Case 2 unix`);
+    res.json({
+      unix: Math.floor(myDate2.getTime()),
+      utc: myDate2.toUTCString()
+    });
+  } else {
+    console.log(`Case 3 invalid`);
+    res.json({
+      error: "Invalid Date"
+    });
+  }
+
+});
 
 
 // listen for requests :)
