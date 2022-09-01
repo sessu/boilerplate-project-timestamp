@@ -18,15 +18,25 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/api/", (req, res) => {
+    // No params
+    const currentTime = new Date();
+    console.log(`${currentTime} requested`);
+
+    res.json({
+      unix: Math.floor(currentTime.getTime()),
+      utc: currentTime.toUTCString()
+    });
+});
 
 app.get("/api/:date", (req, res) => {
   // Assuming it's an ISO date
   const myDate = new Date (req.params.date);
-  console.log(myDate);
+  //console.log(myDate);
 
   // Assuming it's UNIX
   const myDate2 = new Date (parseInt(req.params.date));
-  console.log(myDate2);
+  //console.log(myDate2);
 
   if (myDate instanceof Date && !isNaN(myDate)) {
     console.log(`Case 1 ${myDate}`);
@@ -51,6 +61,6 @@ app.get("/api/:date", (req, res) => {
 
 
 // listen for requests :)
-var listener = app.listen(5000, function () {
+var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
